@@ -1,0 +1,38 @@
+{
+  "manifest_version": 2,
+
+  "name": "Sun-Asterisk Alert",
+  "description": "Show alert banner to some specific websites",
+  "version": "1.0.0",
+  "icons": {
+    "32": "assets/img/ico-32.png",
+    "48": "assets/img/ico-32.png"
+  },
+
+  "browser_action": {
+    "default_icon": "assets/img/ico-32.png",
+    "default_popup": "popup.html",
+    "default_title": "Kz Alert"
+  },
+  "permissions": [
+    "tabs",
+    "storage",
+    "webNavigation"
+  ],
+  "content_scripts": [{
+    "matches": [
+      "*://*/*"
+    ],
+    "js": [
+      "assets/js/kz-alert.js"
+    ],
+    "css": [
+      "assets/css/alert.css"
+    ]
+  }],
+  "background": {
+    "scripts": [
+      "assets/js/background.js"
+    ]
+  }
+}

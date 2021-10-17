@@ -1,0 +1,55 @@
+.container {
+  width: 300px;
+  text-align: justify;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.popup-area {
+  padding: 10px 0;
+  border-bottom: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-area:last-child {
+  border-bottom: unset;
+}
+
+.container a {
+  color: #00F;
+  text-decoration: none;
+}
+
+.container a:hover {
+  color: #F00;
+  text-decoration: underline;
+}
+
+.container p, .container .p {
+  border: 1px dashed #CCC;
+  padding: 8px;
+}
+
+.list-warning-sites, td, th {
+  border: 1px solid black;
+}
+
+.list-warning-sites {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.site-name {
+  width: 70%;
+}
+
+#on_off_warning {
+  width: 80px;
+  height: 80px;
+  color: darkgrey;
+  border: 1px solid red;
+  border-radius: 50%;
+}
