@@ -18,26 +18,25 @@
   border-bottom: unset;
 }
 
-.container a {
-  color: #00F;
-  text-decoration: none;
+.list-area {
+  flex-direction: column;
 }
 
-.container a:hover {
-  color: #F00;
-  text-decoration: underline;
+.list-text {
+  font-weight: bold;
+  font-size: 16px;
+  margin: 1px 0;
 }
 
-.container p, .container .p {
-  border: 1px dashed #CCC;
-  padding: 8px;
+#list-warning-sites {
+  width: 100%;
 }
 
-.list-warning-sites, td, th {
+.list-warning-sites-table, td, th {
   border: 1px solid black;
 }
 
-.list-warning-sites {
+.list-warning-sites-table {
   width: 100%;
   border-collapse: collapse;
 }
@@ -50,6 +49,14 @@
   width: 80px;
   height: 80px;
   color: darkgrey;
-  border: 1px solid red;
   border-radius: 50%;
+  font-weight: bold;
+}
+
+.on-btn {
+  border: 1px solid green;
+}
+
+.off-btn {
+  border: 1px solid red;
 }

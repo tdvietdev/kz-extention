@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
 
-  "name": "Sun-Asterisk Alert",
+  "name": "Kz Production Alert",
   "description": "Show alert banner to some specific websites",
   "version": "1.0.0",
   "icons": {

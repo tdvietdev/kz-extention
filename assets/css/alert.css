@@ -22,13 +22,15 @@
   flex: 1 1 auto;
   line-height: 120%;
   text-align: center;
+
+  animation:blinkingText 2s infinite;
 }
-#kz-alert-message > span:nth-last-child(1) {
-  flex: 0 1 auto;
+
+@keyframes blinkingText{
+  0%{		color: white;	}
+  49%{	color: red;	}
+  50%{	color: green;	}
+  99%{	color: yellow;	}
+  100%{	color: violet;	}
 }
-#kz-alert-message #close-alert-message {
-  font-size: 16px;
-  cursor: pointer;
-  margin: 0 5px;
-  padding: 0 5px;
-}
+

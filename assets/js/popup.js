@@ -30,27 +30,23 @@ function createTable(tableData, options = {}) {
 
 function createListSitesTable() {
   var tableArea = document.getElementById("list-warning-sites");
+  tableArea.innerHTML = '';
 
   chrome.storage.local.get([SITES_KEY], function(result) {
     if (result[SITES_KEY]) {
       var dataSite = JSON.parse(result[SITES_KEY]),
           dataTable = Object.keys(dataSite).map((key) => [key, dataSite[key] ? 'Endable' : 'Disable' ]),
-          table = createTable(dataTable, {classes: ['site-name', 'status'], tableClass: 'list-warning-sites'});
+          table = createTable(dataTable, {classes: ['site-name', 'status'], tableClass: 'list-warning-sites-table'});
 
       tableArea.append(table);
     }
   });
-
 }
 
 function getHostName(hrefStr) {
   var l = document.createElement("a");
   l.href = hrefStr;
   return l.hostname.replace(/^w{3}\./, "");;
-};
-
-function currentHostName() {
-  return window.location.hostname.replace(/^w{3}\./, "");
 }
 
 function updateStatusOfSite(site) {
@@ -68,6 +64,8 @@ function updateStatusOfSite(site) {
     storageData[SITES_KEY] = JSON.stringify(dataSites);
 
     chrome.storage.local.set(storageData);
+    updatePopupStatus(dataSites[site]);
+
     chrome.tabs.query({}, function(tabs) {
       tabs.forEach(function(tab) {
         chrome.tabs.sendMessage(tab.id, {
@@ -78,24 +76,49 @@ function updateStatusOfSite(site) {
   });
 }
 
-
 function handleOnOffClick() {
   document.getElementById("on_off_warning").onclick = () => {
     chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
       var url = tabs[0].url;
-      console.log('url')
-      console.log(url)
       updateStatusOfSite(getHostName(url));
     });
-
-
   }
 }
 
+function updatePopupStatus(status) {
+  // update button
+  var buttonElement = document.getElementById("on_off_warning");
 
+  if(status) {
+    buttonElement.innerText = "TURN OFF WARNING SITE";
+  } else {
+    buttonElement.innerText = "TURN ON WARNING SITE";
+  }
+  buttonElement.className = `${status ? 'on' : 'off'}-btn`
+
+  // update table
+  createListSitesTable();
+}
+
+function initButtonOfOff() {
+  chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
+    var url = tabs[0].url,
+        site = getHostName(url);
+
+    chrome.storage.local.get([SITES_KEY], function(result) {
+      var dataSites = {}
+
+      if (result[SITES_KEY]) {
+        dataSites = JSON.parse(result[SITES_KEY])
+      }
+
+      updatePopupStatus(dataSites[site]);
+    })
+  });
+}
 
 window.onload = function() {
-  // get data and create table
-  createListSitesTable();
   handleOnOffClick();
+  createListSitesTable();
+  initButtonOfOff();
 }

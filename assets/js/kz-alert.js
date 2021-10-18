@@ -1,10 +1,10 @@
 /**
- * Một số constant
+ * constants
  */
 var STORAGE_KEY_PREFIX = "CHROME_KZ_ALERT_";
 var SITES_KEY = STORAGE_KEY_PREFIX + "SITES";
 var ALERT_MESSAGE_ELEMENT_ID = "kz-alert-message";
-var DEFAULT_WARNING_SITES = ['facebook.com', 'youtube.com']
+var DEFAULT_WARNING_SITES = ['auth.kuzen.io', 'dialog.kuzen.io', 'dashboard.kuzen.io', 'custom.kuzen.io']
 
 function setDefaultWarningSites() {
   var storageData = {},
@@ -14,17 +14,13 @@ function setDefaultWarningSites() {
 
   chrome.storage.local.set(storageData);
 }
-setDefaultWarningSites()
 
 chrome.storage.local.get([SITES_KEY], function(result) {
-  if (result[SITES_KEY]) {
+  if (!result[SITES_KEY]) {
     setDefaultWarningSites();
   }
 });
 
-/**
- * Kiểm tra để cập nhật lại danh sách các URLs cần hiển thị alert
- */
 function allowableWarningInCurrentSite() {
   var currentSite = window.location.hostname.replace(/^w{3}\./, "");
 
@@ -32,7 +28,7 @@ function allowableWarningInCurrentSite() {
     if (result[SITES_KEY]) {
       var dataObject = JSON.parse(result[SITES_KEY]);
       if(!!dataObject[currentSite]) {
-        showMessage('Canh bao')
+        showMessage('Please be careful when operating on this website!')
       } else {
         clearOldAlertMessages();
       }
@@ -56,9 +52,6 @@ function showMessage(message) {
   window.onresize = () => document.body.style.setProperty("margin-top", messageElement.clientHeight + "px", "important");
 }
 
-/**
- * Xóa những alert messages trước đó (nếu có)
- */
 function clearOldAlertMessages() {
   var oldAlertMessageElement = getAlertMessageElementId();
 
@@ -72,25 +65,17 @@ function getAlertMessageElementId() {
   return document.getElementById(ALERT_MESSAGE_ELEMENT_ID);
 }
 
-/**
- * Hiển thị message. Nếu có
- */
 allowableWarningInCurrentSite();
 
 /**
- * Lắng nghe sự kiện được gửi từ background page (hoặc từ extension popup)
+ * Listen for events sent from background page (or from extension popup)
  */
 chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
   if (message.event === "KZ_UPDATE_DISPLAY_WARNING") {
-    console.log('cccco mes')
     document.addEventListener("turbolinks:load", function() {
       allowableWarningInCurrentSite();
     });
 
     allowableWarningInCurrentSite();
   }
-
-  /**
-   * Force update lại các URLs từ API mà không cần đợi 3h/lần :v
-   */
 });
